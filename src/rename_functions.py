@@ -16,7 +16,7 @@ def change_name(path, old_name, new_name):
     :return:
     """
     logger = logging.getLogger("my_app")
-    old = pathlib.Path(path) / old_name
+    old = os.path.join(path, old_name)
     file_split = old_name.split('.')
     logger.debug("Splitted file: " + str(file_split))
     logger.debug("Extension: " + str(file_split[-1]))
@@ -70,9 +70,9 @@ def get_device_from_exif(filePath):
     logger = logging.getLogger("my_app")
     currentFile = open(filePath, 'rb')
     tags = exifread.process_file(currentFile)
-    #logger.debug(tags.keys())
-    logger.debug("END FILE")
-    logger.debug(tags["Image Model"])
+    # logger.debug(tags.keys())
+    # logger.debug("END FILE")
+    logger.debug("Tag Image Model: " + str(tags["Image Model"]))
     deviceTag = "Image Model"
     if deviceTag in tags:
         deviceName = str(tags[deviceTag])
@@ -83,30 +83,11 @@ def get_device_from_exif(filePath):
     return deviceName
 
 
-def change_names_in_folder(args):
-    """
-
-    :param args:
-    :return:
-    """
-    logger = logging.getLogger("my_app")
-    folder_path = args.path
-    for dirPath, dirNames, filenames in os.walk(folder_path):
-        for f in filenames:
-            filePath = os.path.join(dirPath, f)
-            date_taken = gets_date_taken(filePath)
-            if date_taken == "0000:00 0000:0000":
-                logger.warning("No file name change fore file with name", f, "in folder", dirPath,
-                                "\n ERROR NO DATE TAKEN IN EXIF DATA (' + f + ')")
-                continue
-            elif args.autosuffix:
-                device = get_device_from_exif(filePath)
-                if device is not None:
-                    new_name = date_taken_new_name(date_taken) + "--" + device.replace(' ', '_')
-            elif args.suffix is not None:
-                new_name = date_taken_new_name(date_taken) + "--" + args.suffix.replace(' ', '_')
-            else:
-                new_name = date_taken_new_name(date_taken)
-            logger.debug(new_name)
-            change_name(dirPath, f, new_name)
+def get_num_dirs(dir):
+    count = 0
+    path = pathlib.Path(dir)
+    for subdir in path.glob('**/'):
+        if subdir.is_dir():
+            count += 1
+    return count
 
