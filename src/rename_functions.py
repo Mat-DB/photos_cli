@@ -21,18 +21,23 @@ def change_name(path, old_name, new_name):
     logger.debug("Splitted file: " + str(file_split))
     logger.debug("Extension: " + str(file_split[-1]))
     extension = file_split[-1]
+    if new_name == "" or new_name is None:
+        logger.critical("The new filename cannot be nothing!")
+        return
     new = os.path.join(path, (new_name + '.' + extension))
+    if os.path.isfile(new):
+        logger.error("File: " + str(old) + " already exists, not changed!")
+        logger.critical("On unix machines " + str(new) + " would be overwritten!!")
+        return
     try:
         os.rename(old, new)
         logger.info("Name changed from " + old_name + " to " + new_name + '.' + extension + " in folder " + path)
-    except FileExistsError as error:
-        logger.error(str(error) + '\n' + old + " changed with (1) behind the name!")
-        new2 = os.path.join(path, (new_name + "(1)." + extension))
-        try:
-            os.rename(old, new2)
-            logger.info("Name changed from " + old_name + " to " + new_name + '.' + extension + " in folder " + path)
-        except FileExistsError as error:
-            logger.error(error, '\n' + str(old), "not changed!")
+    except FileExistsError as existsError:
+        logger.debug(str(existsError))
+        logger.error("File:" + str(old) + " already exists, not changed!")
+    except FileNotFoundError as notFoundError:
+        logger.debug(str(notFoundError))
+        logger.error("File:" + str(old) + " not found!")
 
 
 def date_taken_new_name(date_taken):
@@ -72,13 +77,14 @@ def get_device_from_exif(filePath):
     tags = exifread.process_file(currentFile)
     # logger.debug(tags.keys())
     # logger.debug("END FILE")
-    logger.debug("Tag Image Model: " + str(tags["Image Model"]))
     deviceTag = "Image Model"
     if deviceTag in tags:
+        logger.debug("Tag Image Model: " + str(tags["Image Model"]))
         deviceName = str(tags[deviceTag])
         if not deviceName:
             deviceName = None
     else:
+        logger.debug("Tag Image Model does not exist")
         deviceName = None
     return deviceName
 
