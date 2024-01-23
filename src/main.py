@@ -140,7 +140,7 @@ if __name__ == '__main__':
                 # # Ad the file to the dict
                 filenames_dict[new_name] = 1
             elif filenames_dict.get(new_name) == 1:
-                logger.warning("On " + new_name + " there have been at least 2 photos been made")
+                logger.error("On " + new_name + " there have been at least 2 photos been made")
                 logger.warning("Trying to add (1) and (2) to the the end of the photos name")
                 # # Rename the current photo to the new name with (2) behind it
                 # # Check if the file already has the correct name
