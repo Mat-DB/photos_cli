@@ -2,10 +2,11 @@ import logging
 
 
 class ColorLoggingFormatter(logging.Formatter):
-    """
-    For the color codes have a look at the following URL.
+    """For the color codes have a look at the following URL.
+
     https://talyian.github.io/ansicolors/
     """
+
     # Colors
     grey = "\x1b[38;20m"
     green = "\033[1;32m"
@@ -26,7 +27,7 @@ class ColorLoggingFormatter(logging.Formatter):
         logging.INFO: reset + messageFormatPart1 + green + messageFormatPart2 + reset,
         logging.WARNING: reset + messageFormatPart1 + yellow + messageFormatPart2LineNumber + reset,
         logging.ERROR: reset + messageFormatPart1 + orange + messageFormatPart2LineNumber + reset,
-        logging.CRITICAL: reset + messageFormatPart1 + red + messageFormatPart2LineNumber + reset
+        logging.CRITICAL: reset + messageFormatPart1 + red + messageFormatPart2LineNumber + reset,
     }
 
     def format(self, record):
