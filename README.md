@@ -1,11 +1,11 @@
 # Photos CLI tool
+CLI tool to batch manipulate photos.
 
-CLI tool to rename photos with extra features.
-The main feature is to rename photos to the moment they are taken in a standard form.
-YYYY-MM-DD--HH-MM-SS.extension
+## Features
+- Rename photos to the moment they are taken in a standard form, `YYYYMMDD_HHMMSS.extension`
+- 2 types of suffixes.
+  - A custom suffix to get the following form, `YYYYMMDD_HHMMSS-suffix.extension`
+  - An automatic suffix with the device name that you made the photo with, coming from the exif data. Final form `YYYYMMDD_HHMMSS-device.extension`
+- Adjust the data taken of a photo in the EXIF data. Useful if you forgot to change summer/winter time on your camera.
 
-Optional you can add a suffix to get the following form.
-YYYY-MM-DD--HH-MM-SS--suffix.extension
 
-Another option is to automatically make the suffix the device that made the photo. This is done by taking looking into the exif data.
-YYYY-MM-DD--HH-MM-SS--device.extension

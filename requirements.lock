@@ -9,9 +9,13 @@
 #   generate-hashes: false
 
 -e file:.
+argcomplete==3.5.3
+    # via photos-cli
 argparse==1.4.0
     # via photos-cli
 exifread==3.0.0
+    # via photos-cli
+piexif==1.1.3
     # via photos-cli
 tqdm==4.66.4
     # via photos-cli
