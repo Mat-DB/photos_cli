@@ -8,6 +8,7 @@ Convention:
 
 import argparse
 import logging
+import sys
 
 # import argcomplete
 import ColorLoggingFormatter
@@ -20,6 +21,7 @@ https://stackoverflow.com/questions/14597466/custom-tab-completion-in-python-arg
 
 Sources,
 https://stackoverflow.com/questions/18668227/argparse-subcommands-with-nested-namespaces
+https://stackoverflow.com/questions/4042452/display-help-message-with-python-argparse-when-script-is-called-without-any-argu
 
 """
 # CLI tool version
@@ -89,6 +91,19 @@ def setup_argparse():
     main_parser.add_argument("--version", help="show version and exit", action="version", version=version)
     # argcomplete.autocomplete(main_parser)
     arguments = main_parser.parse_args()
+    if arguments.command is None:
+        print(
+            ColorLoggingFormatter.Colors.BOLD_RED.value
+            + "ERROR: no argument specified.\nHelp is printed instead!!"
+            + ColorLoggingFormatter.Colors.RESET.value
+        )
+        main_parser.print_help()
+        print(
+            ColorLoggingFormatter.Colors.BOLD_RED.value
+            + "ERROR: no argument specified.\nHelp is printed instead!! (see above)"
+            + ColorLoggingFormatter.Colors.RESET.value
+        )
+        sys.exit(-1)
     return arguments
 
 
@@ -108,6 +123,8 @@ def setup_logging(logLevel):
 if __name__ == "__main__":
     # # Setup of the application
     args = setup_argparse()
+    print(args)
+
     setup_logging(args.verbosity)
     logger = logging.getLogger("my_app")
 
@@ -120,8 +137,6 @@ if __name__ == "__main__":
 
     # # Output basic information
     logger.info("Path: " + args.path)
-
-    print(args)
 
     if args.command == "time":
         logger.info("time command selected")

@@ -2,7 +2,6 @@
 
 import logging
 import os
-import pathlib
 
 import exifread
 
@@ -102,20 +101,3 @@ def get_device_from_exif(filePath):
             logger.debug("Tag Image Model does not exist")
             deviceName = None
         return deviceName
-
-
-def get_num_dirs(dir):
-    """_summary_.
-
-    Args:
-        dir: _description_
-
-    Returns:
-        _description_
-    """
-    count = 0
-    path = pathlib.Path(dir)
-    for subdir in path.glob("**/"):
-        if subdir.is_dir():
-            count += 1
-    return count
