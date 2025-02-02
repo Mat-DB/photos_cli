@@ -4,14 +4,12 @@ import os
 
 from tqdm import tqdm
 
-from functions import adjust_time, generalFunctions
+from ColorLoggingFormatter import Colors
+from functions import generalFunctions, timeFunctions
 
 
 def time(args):
     logger = logging.getLogger("my_app")
-    old_date = generalFunctions.get_date_from_EXIF("/home/matthias/Desktop", "test.JPG")
-    new_date = adjust_time.asking_new_date if args.fullTime else old_date + datetime.timedelta(hours=args.time_adj)
-    logger.info("old time:", old_date, ", new time:", new_date)
 
     # # The beginning of the whole process
     # Init variables
@@ -22,7 +20,11 @@ def time(args):
     if args.progress:
         progressCounter = 1
         numSubdirs = generalFunctions.get_num_dirs(folder_path)
-        print("\033[94m There are", numSubdirs, "progressbars to complete! \x1b[0m")
+        if numSubdirs == 1:
+            print(Colors.LIGHT_BLUE.value + "There is 1 progressbar to complete!" + Colors.RESET.value)
+        else:
+            print(Colors.LIGHT_BLUE.value + "There are", numSubdirs, "progressbars to complete!" + Colors.RESET.value)
+
     # Execute loop over photos
     for dirPath, _dirNames, filenames in os.walk(args.path):
         # # Sort the files
@@ -35,4 +37,9 @@ def time(args):
         else:
             files = sorted_files
         for file in files:
-            ...
+            logger.debug("NEXT FILE")
+            old_date = generalFunctions.get_date_from_EXIF(dirPath, file)
+            if old_date == -1:
+                continue
+            new_date = timeFunctions.asking_new_date if args.fullTime else old_date + datetime.timedelta(hours=args.time_adj)
+            timeFunctions.change_date_from_EXIF(dirPath, file, new_date)

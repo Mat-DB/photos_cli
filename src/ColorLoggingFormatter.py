@@ -10,6 +10,7 @@ class Colors(Enum):
     RED = "\x1b[31;20m"
     BOLD_RED = "\x1b[31;1m"
     RESET = "\x1b[0m"
+    LIGHT_BLUE = "\033[94m"
 
 
 class ColorLoggingFormatter(logging.Formatter):

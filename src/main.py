@@ -25,7 +25,7 @@ https://stackoverflow.com/questions/4042452/display-help-message-with-python-arg
 
 """
 # CLI tool version
-version = "1.1"
+version = "2.0"
 
 
 def setup_argparse():
@@ -41,7 +41,7 @@ def setup_argparse():
     general_args_parser.add_argument(
         "-p",
         "--progress",
-        help="display a progressbar at the bottom of the screen. WARNING does not " "work wel with all verbosity levels!!",
+        help="display a progressbar at the bottom of the screen. WARNING does not work wel with all verbosity levels!!",
         action="store_true",
         dest="progress",
     )

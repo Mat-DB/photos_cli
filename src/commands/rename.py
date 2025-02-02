@@ -3,7 +3,8 @@ import os
 
 from tqdm import tqdm
 
-from functions import check_extensions, renameFunctions
+from ColorLoggingFormatter import Colors
+from functions import generalFunctions, renameFunctions
 
 
 def rename(args):
@@ -23,8 +24,12 @@ def rename(args):
     # # Print the amount a directories there are, this is also the amount of progress bars
     if args.progress:
         progressCounter = 1
-        numSubdirs = renameFunctions.get_num_dirs(folder_path)
-        print("\033[94m There are", numSubdirs, "progressbars to complete! \x1b[0m")
+        numSubdirs = generalFunctions.get_num_dirs(folder_path)
+        if numSubdirs == 1:
+            print(Colors.LIGHT_BLUE.value + "There is 1 progressbar to complete!" + Colors.RESET.value)
+        else:
+            print(Colors.LIGHT_BLUE.value + "There are", numSubdirs, "progressbars to complete!" + Colors.RESET.value)
+
     # # Walking over every file and directory in the given directory
     for dirPath, _dirNames, filenames in os.walk(folder_path):
         # # Sort the files
@@ -41,7 +46,7 @@ def rename(args):
             logger.debug("NEXT FILE")
             filePath = os.path.join(dirPath, file)
             extension = str(file).split(".")[-1]
-            if not check_extensions.check_extension(extension):
+            if not generalFunctions.check_extension(extension):
                 logger.warning("The following file type is not supported, " + extension)
                 logger.warning("Skipping file, " + str(filePath))
                 continue
