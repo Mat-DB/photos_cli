@@ -68,6 +68,13 @@ def setup_argparse():
     time_adj_group = timeParser.add_mutually_exclusive_group(required=True)
     time_adj_group.add_argument("-t", "--time", type=int, help="in hours the amount to adjust the date taken", dest="time_adj")
     time_adj_group.add_argument("--fullTime", help="specify a full time for ALL pictures", action="store_true", dest="fullTime")
+    timeParser.add_argument(
+        "-O",
+        "--overwrite_original",
+        help="CAREFUL, overwrite the original FILE. Instead of preserving it by adding '_original' to the filename",
+        action="store_false",  # Default set to False, do not overwrite!
+        dest="overwrite_original",
+    )
 
     # Create a subparser for the "rename" command
     renameParser = sub_parsers.add_parser(

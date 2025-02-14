@@ -1,8 +1,7 @@
 import datetime
 import logging
 import os
-
-import piexif
+import subprocess
 
 
 def asking_new_date():
@@ -28,14 +27,34 @@ def asking_new_date():
     return new_date
 
 
-def change_date_from_EXIF(path, file_name, new_date):
+def change_date_from_EXIF(path, file_name, new_date, preserve_original):
     logger = logging.getLogger("my_app")
     file_path = os.path.join(path, file_name)
     try:
-        exif_dict = piexif.load(file_path)
-        exif_dict["Exif"][piexif.ExifIFD.DateTimeOriginal] = new_date.strftime("%Y:%m:%d %H:%M:%S").encode("utf-8")
-        exif_bytes = piexif.dump(exif_dict)
-        piexif.insert(exif_bytes, file_path)
+        # print(file_path)
+        # print(new_date.strftime("%Y:%m:%d %H:%M:%S"))
+        if preserve_original:
+            status, result = subprocess.getstatusoutput(
+                [
+                    f'exiftool "-AllDates={new_date} -preserve" {path}/{file_name}',
+                    new_date.strftime("%Y:%m:%d %H:%M:%S"),
+                    path,
+                    file_name,
+                ]
+            )
+        else:
+            status, result = subprocess.getstatusoutput(
+                [
+                    f'exiftool "-AllDates={new_date}" -preserve -overwrite_original {path}/{file_name}',
+                    new_date.strftime("%Y:%m:%d %H:%M:%S"),
+                    path,
+                    file_name,
+                ]
+            )
+        if status != 0:
+            logger.error("exiftool has trown an error, full exiftool output:\n" + result)
+        if "1 image files updated" not in result:
+            logger.warning(result)
         logger.info(f"Date changed for {file_path} to new date, {new_date}")
     except Exception as e:
         logger.error(f"Failed to process {file_path}: {e}")

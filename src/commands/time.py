@@ -1,6 +1,8 @@
 import datetime
 import logging
 import os
+import subprocess
+import sys
 
 from tqdm import tqdm
 
@@ -10,6 +12,12 @@ from functions import generalFunctions, timeFunctions
 
 def time(args):
     logger = logging.getLogger("my_app")
+
+    # Check if exiftool is available, if not -> abort.
+    status, result = subprocess.getstatusoutput("exiftool -h")
+    if status != 0:
+        logger.ERROR("Command 'exiftool' not found!")
+        sys.exit(-1)
 
     # # The beginning of the whole process
     # Init variables
@@ -42,4 +50,4 @@ def time(args):
             if old_date == -1:
                 continue
             new_date = timeFunctions.asking_new_date if args.fullTime else old_date + datetime.timedelta(hours=args.time_adj)
-            timeFunctions.change_date_from_EXIF(dirPath, file, new_date)
+            timeFunctions.change_date_from_EXIF(dirPath, file, new_date, args.overwrite_original)
