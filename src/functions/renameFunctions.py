@@ -6,7 +6,7 @@ import os
 import exifread
 
 
-def change_name(path, old_name, new_name):
+def change_name(path, old_name, new_name, dry_run):
     """Change the name of a file and appends a number if the file exists.
 
     Args:
@@ -29,7 +29,8 @@ def change_name(path, old_name, new_name):
         logger.critical("On unix machines " + str(new) + " would be overwritten!!")
         return
     try:
-        os.rename(old, new)
+        if not dry_run:
+            os.rename(old, new)
         logger.info("Name changed from " + old_name + " to " + new_name + "." + extension + " in folder " + path)
     except FileExistsError as existsError:
         logger.debug(str(existsError))

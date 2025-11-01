@@ -95,6 +95,15 @@ def setup_argparse():
         dest="autosuffix",
     )
 
+    # An option to do a dry run, do not rename just output
+    renameParser.add_argument(
+        "-n",
+        "--dry-run",
+        help="Do a dry run. Do not rename, just output if debug is INFO",
+        action="store_true",
+        dest="dry_run",
+    )
+
     main_parser.add_argument("--version", help="show version and exit", action="version", version=version)
     # argcomplete.autocomplete(main_parser)
     arguments = main_parser.parse_args()

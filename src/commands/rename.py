@@ -15,6 +15,8 @@ def rename(args):
         logger.info("Suffix: auto")
     else:
         logger.info("Suffix: no suffix")
+    if args.dry_run:
+        logger.warning("This is a dry run!!")
     # # The beginning of the whole process
     # Init variables
     folder_path = args.path
@@ -80,7 +82,7 @@ def rename(args):
                 continue
             # # Check if there are one or more photos made on the same second and rename correctly
             if new_name not in filenames_dict:
-                renameFunctions.change_name(dirPath, file, new_name)
+                renameFunctions.change_name(dirPath, file, new_name, args.dry_run)
                 # # Ad the file to the dict
                 filenames_dict[new_name] = 1
             elif filenames_dict.get(new_name) == 1:
@@ -92,10 +94,10 @@ def rename(args):
                 if str(file).split(".")[0] == new_name2:
                     logger.info("File already has the correct name, " + str(filePath))
                 else:
-                    renameFunctions.change_name(dirPath, file, new_name2)
+                    renameFunctions.change_name(dirPath, file, new_name2, args.dry_run)
                 # # Rename the already existing photo to the new name with (1) behind it
                 sameFile_newName = new_name + "(1)"
-                renameFunctions.change_name(dirPath, (new_name + "." + extension), sameFile_newName)
+                renameFunctions.change_name(dirPath, (new_name + "." + extension), sameFile_newName, args.dry_run)
                 # # Update the amount of photos made on that moment
                 filenames_dict[new_name] = filenames_dict[new_name] + 1
             else:
@@ -106,6 +108,6 @@ def rename(args):
                 if str(file).split(".")[0] == new_name2:
                     logger.info("File already has the correct name, " + str(filePath))
                 else:
-                    renameFunctions.change_name(dirPath, file, new_name2)
+                    renameFunctions.change_name(dirPath, file, new_name2, args.dry_run)
                 # # Update the amount of photos made on that moment
                 filenames_dict[new_name] = filenames_dict[new_name] + 1
