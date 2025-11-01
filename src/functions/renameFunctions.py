@@ -57,6 +57,16 @@ def date_taken_new_name(date_taken):
     return new_name
 
 
+def date_taken_half_new_name(date_taken, old_name):
+    """
+    
+    """
+    dateArray = date_taken.split(" ")
+    date = dateArray[0].split(":")
+    new_name = date[0] + date[1] + date[2] + "_" + old_name
+    return new_name
+
+
 def gets_date_taken(file_path):
     """Get the date taken from a picture.
 

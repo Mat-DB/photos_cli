@@ -69,6 +69,9 @@ def rename(args):
                     continue
             elif args.suffix is not None:
                 new_name = renameFunctions.date_taken_new_name(date_taken) + "--" + args.suffix.replace(" ", "_")
+            elif args.date_in_front:
+                old_name = str(file).split(".")[0]
+                new_name = renameFunctions.date_taken_half_new_name(date_taken, old_name)
             else:
                 new_name = renameFunctions.date_taken_new_name(date_taken)
             logger.debug(new_name)

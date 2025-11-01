@@ -94,6 +94,13 @@ def setup_argparse():
         action="store_true",
         dest="autosuffix",
     )
+    suffixGroup.add_argument(
+        "-d",
+        "--add-date",
+        help="Special format, add date in front of file name. Eg: YYYYMMDD-<original_name>.<extension>",
+        action="store_true",
+        dest="date_in_front",
+    )
 
     # An option to do a dry run, do not rename just output
     renameParser.add_argument(
